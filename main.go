@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -21,6 +22,7 @@ func main() {
 	})
 	e.Use(logger)
 	e.Use(middleware.Recover())
+	e.Use(middleware.BodyDump(bodyDumpHandler))
 
 	e.POST("/v1/echo", postEcho)
 	e.Logger.Fatal(e.Start(":1323"))
@@ -56,4 +58,9 @@ func logFormat() string {
 	format += "host:${host}\n"
 
 	return format
+}
+
+func bodyDumpHandler(c echo.Context, reqBody, resBody []byte) {
+	fmt.Printf("Request Body: %v\n", string(reqBody))
+	fmt.Printf("Response Body: %v\n", string(resBody))
 }
