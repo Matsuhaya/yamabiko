@@ -24,8 +24,15 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyDump(bodyDumpHandler))
 
+	e.GET("/", getWelcome)
 	e.POST("/v1/echo", postEcho)
 	e.Logger.Fatal(e.Start(":1323"))
+}
+
+func getWelcome(c echo.Context) error {
+	y := new(Yamabiko)
+	y.Message = "Welcome to Yamabiko!!"
+	return c.JSON(http.StatusOK, y)
 }
 
 func postEcho(c echo.Context) error {
