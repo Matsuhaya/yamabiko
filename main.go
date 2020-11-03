@@ -21,9 +21,12 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyDump(bodyDumpHandler))
 
+	// initialize handler
+	h := &handler.Handler{}
+
 	// routing
-	e.GET("/", handler.GetWelcome())
-	e.POST("/v1/echo", handler.PostEcho())
+	e.GET("/", h.GetWelcome)
+	e.POST("/v1/echo", h.PostEcho)
 
 	// start server
 	e.Logger.Fatal(e.Start(":1323"))
