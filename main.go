@@ -2,17 +2,12 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
+	"github.com/Matsuhaya/yamabiko/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
-
-// Yamabiko is response
-type Yamabiko struct {
-	Message string `json:"message"`
-}
 
 func main() {
 	e := echo.New()
@@ -27,25 +22,11 @@ func main() {
 	e.Use(middleware.BodyDump(bodyDumpHandler))
 
 	// routing
-	e.GET("/", getWelcome)
-	e.POST("/v1/echo", postEcho)
+	e.GET("/", handler.GetWelcome())
+	e.POST("/v1/echo", handler.PostEcho())
 
 	// start server
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func getWelcome(c echo.Context) error {
-	y := new(Yamabiko)
-	y.Message = "Welcome to Yamabiko!!"
-	return c.JSON(http.StatusOK, y)
-}
-
-func postEcho(c echo.Context) error {
-	y := new(Yamabiko)
-	if err := c.Bind(y); err != nil {
-		return err
-	}
-	return c.JSON(http.StatusOK, y)
 }
 
 func logFormat() string {
