@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+// Yamabiko is response
 type Yamabiko struct {
 	Message string `json:"message"`
 }
@@ -16,6 +17,7 @@ type Yamabiko struct {
 func main() {
 	e := echo.New()
 
+	// middleware
 	logger := middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: logFormat(),
 		Output: os.Stdout,
@@ -24,8 +26,11 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyDump(bodyDumpHandler))
 
+	// routing
 	e.GET("/", getWelcome)
 	e.POST("/v1/echo", postEcho)
+
+	// start server
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
